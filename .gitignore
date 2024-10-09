@@ -15,4 +15,3 @@ venv/
 
 # Database
 *.sqlite3
-/.idea
