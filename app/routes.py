@@ -78,7 +78,8 @@ def update_workout(workout_id):
         return jsonify({"message": "Workout not found"}), 404
 
     data = request.json
-    workout.date = data.get('date', workout.date)
+    if 'date' in data:
+        workout.date = datetime.strptime(data['date'], '%Y-%m-%d').date()  # Konwersja daty
     workout.comments = data.get('comments', workout.comments)
     db.session.commit()
 
@@ -94,10 +95,16 @@ def delete_workout(workout_id):
     if not workout:
         return jsonify({"message": "Workout not found"}), 404
 
+    # Usunięcie powiązanych ćwiczeń
+    exercises = Exercise.query.filter_by(workout_id=workout_id).all()
+    for exercise in exercises:
+        db.session.delete(exercise)
+
     db.session.delete(workout)
     db.session.commit()
 
     return jsonify({"message": "Workout deleted successfully"}), 200
+
 
 # Add a new exercise to an existing workout
 @workouts_bp.route('/workouts/<int:workout_id>/exercises', methods=['POST'])
@@ -146,3 +153,39 @@ def get_exercises_for_workout(workout_id):
     } for e in exercises]
 
     return jsonify(exercise_list), 200
+
+
+# Generate report for past workouts
+@workouts_bp.route('/workouts/report', methods=['GET'])
+@jwt_required()
+def generate_report():
+    user_id = get_jwt_identity()
+    today = datetime.now()
+
+    # Pobierz wszystkie przeszłe treningi
+    past_workouts = Workout.query.filter(Workout.user_id == user_id, Workout.date < today).all()
+
+    # Stwórz raport
+    report = {
+        "total_workouts": len(past_workouts),
+        "workouts": []
+    }
+
+    for workout in past_workouts:
+        exercises = Exercise.query.filter_by(workout_id=workout.id).all()
+        exercise_list = [{
+            "name": e.name,
+            "category": e.category,
+            "repetitions": e.repetitions,
+            "sets": e.sets,
+            "weight": e.weight
+        } for e in exercises]
+
+        report["workouts"].append({
+            "date": workout.date,
+            "comments": workout.comments,
+            "exercises": exercise_list
+        })
+
+    return jsonify(report), 200
+

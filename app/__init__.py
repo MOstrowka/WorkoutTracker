@@ -1,8 +1,11 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
+from flasgger import Swagger
+from flask_migrate import Migrate  # Dodajemy Flask-Migrate
 
 db = SQLAlchemy()
+
 
 def create_app():
     app = Flask(__name__)
@@ -15,6 +18,12 @@ def create_app():
     # Initialize extensions
     db.init_app(app)
     jwt = JWTManager(app)
+
+    # Initialize Flask-Migrate
+    migrate = Migrate(app, db)  # Dodajemy obsługę migracji
+
+    # Swagger configuration
+    swagger = Swagger(app)
 
     # Register blueprints
     from .auth import auth_bp
