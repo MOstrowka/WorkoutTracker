@@ -180,6 +180,8 @@ Here are some example cURL commands to interact with the API:
 
 Make sure to replace `<TOKEN>` with the actual JWT token returned from the login endpoint.
 
+The idea for this workout tracker application is inspired by [Roadmap.sh](https://roadmap.sh/projects/fitness-workout-tracker).
+
 ## License
 
 This project is licensed under the MIT License.
