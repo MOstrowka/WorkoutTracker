@@ -1,8 +1,10 @@
 from flask import Blueprint, request, jsonify
 from .models import Workout, Exercise, db
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from datetime import datetime
 
 workouts_bp = Blueprint('workouts', __name__)
+
 
 # Create a new workout with exercises
 @workouts_bp.route('/workouts', methods=['POST'])
@@ -10,7 +12,11 @@ workouts_bp = Blueprint('workouts', __name__)
 def create_workout():
     user_id = get_jwt_identity()
     data = request.json
-    workout_date = data.get('date')
+    workout_date_str = data.get('date')
+
+    # Convert the date string to a datetime object
+    workout_date = datetime.strptime(workout_date_str, '%Y-%m-%d').date()
+
     comments = data.get('comments')
     exercises = data.get('exercises')
 

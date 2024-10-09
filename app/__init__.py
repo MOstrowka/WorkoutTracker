@@ -2,7 +2,6 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
 
-# Initialize the database
 db = SQLAlchemy()
 
 def create_app():
@@ -16,5 +15,12 @@ def create_app():
     # Initialize extensions
     db.init_app(app)
     jwt = JWTManager(app)
+
+    # Register blueprints
+    from .auth import auth_bp
+    from .routes import workouts_bp
+
+    app.register_blueprint(auth_bp, url_prefix='/')
+    app.register_blueprint(workouts_bp, url_prefix='/')
 
     return app
