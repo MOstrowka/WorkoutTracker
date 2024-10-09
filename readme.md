@@ -52,6 +52,7 @@ This is a Flask-based API for a workout tracker application where users can sign
 
 2. The API will be available at `http://127.0.0.1:5000`.
 
+
 ## Endpoints
 
 ### User Authentication
@@ -145,6 +146,27 @@ This is a Flask-based API for a workout tracker application where users can sign
       }
       ```
 
+### Exercises
+- **List Exercises**
+    - Endpoint: `/exercises`
+    - Method: `GET`
+    - Response:
+      ```json
+      [
+        {
+          "name": "Push-up",
+          "description": "Bodyweight exercise for chest and triceps",
+          "category": "Bodyweight"
+        },
+        {
+          "name": "Squat",
+          "description": "Bodyweight squat for legs and glutes",
+          "category": "Bodyweight"
+        },
+        ...
+      ]
+      ```
+
 ## Testing
 
 To run the tests:
@@ -162,13 +184,13 @@ Here are some example cURL commands to interact with the API:
 
 - **Sign Up:**
     ```bash
-    curl -X POST "http://127.0.0.1:5000/signup" -H "Content-Type: application/json" -d "{\"email\": \"testuser@example.com\", \"password\": \"testpassword\"}"
+    curl -X POST "http://127.0.0.1:5000/signup" -H "Content-Type: application/json" -d "{"email": "testuser@example.com", "password": "testpassword"}"
     ```
     - This command allows you to create a new user account. Replace `testuser@example.com` and `testpassword` with your desired email and password.
 
 - **Log In:**
     ```bash
-    curl -X POST "http://127.0.0.1:5000/login" -H "Content-Type: application/json" -d "{\"email\": \"testuser@example.com\", \"password\": \"testpassword\"}"
+    curl -X POST "http://127.0.0.1:5000/login" -H "Content-Type: application/json" -d "{"email": "testuser@example.com", "password": "testpassword"}"
     ```
     - This command authenticates the user and returns an access token (JWT). Use the same email and password used during signup.
 
@@ -176,13 +198,13 @@ Here are some example cURL commands to interact with the API:
 
 - **Create Workout:**
     ```bash
-    curl -X POST "http://127.0.0.1:5000/workouts" -H "Authorization: Bearer <TOKEN>" -H "Content-Type: application/json" -d "{\"date\": \"2024-10-01\", \"comments\": \"Morning workout\", \"exercises\": [{\"name\": \"Push-up\", \"description\": \"Chest exercise\", \"category\": \"Bodyweight\", \"repetitions\": 15, \"sets\": 3, \"weight\": 0}]}"
+    curl -X POST "http://127.0.0.1:5000/workouts" -H "Authorization: Bearer <TOKEN>" -H "Content-Type: application/json" -d "{"date": "2024-10-01", "comments": "Morning workout", "exercises": [{"name": "Push-up", "description": "Chest exercise", "category": "Bodyweight", "repetitions": 15, "sets": 3, "weight": 0}]}"
     ```
     - This command allows you to create a new workout. Make sure to replace `<TOKEN>` with the JWT received from the login command.
 
 - **Update Workout:**
     ```bash
-    curl -X PUT "http://127.0.0.1:5000/workouts/<workout_id>" -H "Authorization: Bearer <TOKEN>" -H "Content-Type: application/json" -d "{\"date\": \"2024-10-12\", \"comments\": \"Updated comments\"}"
+    curl -X PUT "http://127.0.0.1:5000/workouts/<workout_id>" -H "Authorization: Bearer <TOKEN>" -H "Content-Type: application/json" -d "{"date": "2024-10-12", "comments": "Updated comments"}"
     ```
     - Use this command to update an existing workout by specifying the workout ID.
 
