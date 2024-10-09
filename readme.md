@@ -162,13 +162,13 @@ Here are some example cURL commands to interact with the API:
 
 - **Sign Up:**
     ```bash
-    curl -X POST "http://127.0.0.1:5000/signup" -H "Content-Type: application/json" -d "{"email": "testuser@example.com", "password": "testpassword"}"
+    curl -X POST "http://127.0.0.1:5000/signup" -H "Content-Type: application/json" -d "{\"email\": \"testuser@example.com\", \"password\": \"testpassword\"}"
     ```
     - This command allows you to create a new user account. Replace `testuser@example.com` and `testpassword` with your desired email and password.
 
 - **Log In:**
     ```bash
-    curl -X POST "http://127.0.0.1:5000/login" -H "Content-Type: application/json" -d "{"email": "testuser@example.com", "password": "testpassword"}"
+    curl -X POST "http://127.0.0.1:5000/login" -H "Content-Type: application/json" -d "{\"email\": \"testuser@example.com\", \"password\": \"testpassword\"}"
     ```
     - This command authenticates the user and returns an access token (JWT). Use the same email and password used during signup.
 
@@ -176,13 +176,13 @@ Here are some example cURL commands to interact with the API:
 
 - **Create Workout:**
     ```bash
-    curl -X POST "http://127.0.0.1:5000/workouts" -H "Authorization: Bearer <TOKEN>" -H "Content-Type: application/json" -d "{"date": "2024-10-01", "comments": "Morning workout", "exercises": [{"name": "Push-up", "description": "Chest exercise", "category": "Bodyweight", "repetitions": 15, "sets": 3, "weight": 0}]}"
+    curl -X POST "http://127.0.0.1:5000/workouts" -H "Authorization: Bearer <TOKEN>" -H "Content-Type: application/json" -d "{\"date\": \"2024-10-01\", \"comments\": \"Morning workout\", \"exercises\": [{\"name\": \"Push-up\", \"description\": \"Chest exercise\", \"category\": \"Bodyweight\", \"repetitions\": 15, \"sets\": 3, \"weight\": 0}]}"
     ```
     - This command allows you to create a new workout. Make sure to replace `<TOKEN>` with the JWT received from the login command.
 
 - **Update Workout:**
     ```bash
-    curl -X PUT "http://127.0.0.1:5000/workouts/<workout_id>" -H "Authorization: Bearer <TOKEN>" -H "Content-Type: application/json" -d "{"date": "2024-10-12", "comments": "Updated comments"}"
+    curl -X PUT "http://127.0.0.1:5000/workouts/<workout_id>" -H "Authorization: Bearer <TOKEN>" -H "Content-Type: application/json" -d "{\"date\": \"2024-10-12\", \"comments\": \"Updated comments\"}"
     ```
     - Use this command to update an existing workout by specifying the workout ID.
 
@@ -209,6 +209,8 @@ Here are some example cURL commands to interact with the API:
 ### Additional Information
 
 For more information about cURL commands and options, you can refer to the official [cURL documentation](https://curl.se/docs/manpage.html).
+
+**Note:** To make using the Bearer token easier, you can save it in a variable in your terminal (for example, in Windows, you can use `set TOKEN=your_token_value`) and then reference it in your cURL commands as `%TOKEN%`.
 
 The idea for this workout tracker application is inspired by [Roadmap.sh](https://roadmap.sh/projects/fitness-workout-tracker).
 
