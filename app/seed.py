@@ -1,5 +1,6 @@
-from . import db
-from .models import Exercise
+from app import db
+from app.models import Exercise, Workout
+from datetime import datetime
 
 def seed_exercises():
     exercises = [
@@ -54,8 +55,14 @@ def seed_exercises():
         {"name": "Child's Pose", "description": "Relaxing stretch for the lower back", "category": "Flexibility", "repetitions": 1, "sets": 3, "weight": 0}
     ]
 
+    # Dodaj treningi i ćwiczenia
+    workout = Workout(user_id=1, date=datetime.now(), comments="Sample workout")  # Upewnij się, że user_id 1 istnieje
+    db.session.add(workout)
+    db.session.commit()  # Zapisz trening, aby uzyskać workout_id
+
     for exercise_data in exercises:
         exercise = Exercise(
+            workout_id=workout.id,  # Przypisz workout_id
             name=exercise_data['name'],
             description=exercise_data['description'],
             category=exercise_data['category'],
@@ -67,3 +74,12 @@ def seed_exercises():
 
     db.session.commit()
     print("Exercises seeded successfully.")
+
+
+if __name__ == '__main__':
+    from app import create_app
+
+    app = create_app()
+    with app.app_context():
+        db.create_all()
+        seed_exercises()

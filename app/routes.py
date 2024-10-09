@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from .models import Workout, Exercise, db
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from datetime import datetime
+from datetime import datetime, timezone
 
 workouts_bp = Blueprint('workouts', __name__)
 
@@ -14,8 +14,8 @@ def create_workout():
     data = request.json
     workout_date_str = data.get('date')
 
-    # Convert the date string to a datetime object
-    workout_date = datetime.strptime(workout_date_str, '%Y-%m-%d').date()
+    # Convert the date string to a datetime object with timezone
+    workout_date = datetime.strptime(workout_date_str, '%Y-%m-%d').replace(tzinfo=timezone.utc)
 
     comments = data.get('comments')
     exercises = data.get('exercises')
@@ -38,6 +38,7 @@ def create_workout():
 
     db.session.commit()
     return jsonify({"message": "Workout created successfully"}), 201
+
 
 # Get all workouts for the current user
 @workouts_bp.route('/workouts', methods=['GET'])
@@ -67,6 +68,7 @@ def get_workouts():
 
     return jsonify(response), 200
 
+
 # Update an existing workout
 @workouts_bp.route('/workouts/<int:workout_id>', methods=['PUT'])
 @jwt_required()
@@ -79,11 +81,12 @@ def update_workout(workout_id):
 
     data = request.json
     if 'date' in data:
-        workout.date = datetime.strptime(data['date'], '%Y-%m-%d').date()  # Konwersja daty
+        workout.date = datetime.strptime(data['date'], '%Y-%m-%d').replace(tzinfo=timezone.utc)  # Konwersja daty
     workout.comments = data.get('comments', workout.comments)
     db.session.commit()
 
     return jsonify({"message": "Workout updated successfully"}), 200
+
 
 # Delete a workout
 @workouts_bp.route('/workouts/<int:workout_id>', methods=['DELETE'])
@@ -131,6 +134,7 @@ def add_exercise_to_workout(workout_id):
     db.session.commit()
 
     return jsonify({"message": "Exercise added successfully"}), 201
+
 
 # Get all exercises for a specific workout
 @workouts_bp.route('/workouts/<int:workout_id>/exercises', methods=['GET'])
@@ -189,3 +193,16 @@ def generate_report():
 
     return jsonify(report), 200
 
+
+# Get all exercises
+@workouts_bp.route('/exercises', methods=['GET'])
+@jwt_required()
+def get_exercises():
+    exercises = Exercise.query.all()  # Pobierz wszystkie ćwiczenia
+    exercise_list = [{
+        "name": e.name,
+        "description": e.description,
+        "category": e.category
+    } for e in exercises]
+
+    return jsonify(exercise_list), 200
