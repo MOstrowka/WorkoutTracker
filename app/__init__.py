@@ -6,7 +6,6 @@ from flask_migrate import Migrate  # Dodajemy Flask-Migrate
 
 db = SQLAlchemy()
 
-
 def create_app():
     app = Flask(__name__)
 
@@ -33,3 +32,7 @@ def create_app():
     app.register_blueprint(workouts_bp, url_prefix='/')
 
     return app
+
+if __name__ == "__main__":
+    app = create_app()
+    app.run(debug=True)  # Włączamy tryb debugowania tutaj

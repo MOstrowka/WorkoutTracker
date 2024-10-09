@@ -28,9 +28,10 @@ class Exercise(db.Model):
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text)
     category = db.Column(db.String(50), nullable=False)
-    repetitions = db.Column(db.Integer, nullable=False)
-    sets = db.Column(db.Integer, nullable=False)
-    weight = db.Column(db.Float)
+    repetitions = db.Column(db.Integer, nullable=False, default=10)  # Domyślne powtórzenia
+    sets = db.Column(db.Integer, nullable=False, default=3)  # Domyślne serie
+    weight = db.Column(db.Float, nullable=False, default=0.0)  # Domyślna waga
+
 
 class Progress(db.Model):
     id = db.Column(db.Integer, primary_key=True)

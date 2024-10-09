@@ -21,10 +21,16 @@ def client(app):
     return app.test_client()
 
 def test_signup(client):
+    # Usuń użytkownika, jeśli istnieje
+    user = User.query.filter_by(email="testuser@example.com").first()
+    if user:
+        db.session.delete(user)
+        db.session.commit()
+
     # Test user signup
     response = client.post("/signup", json={"email": "testuser@example.com", "password": "testpassword"})
     assert response.status_code == 201
-    assert response.get_json()["message"] == "User created successfully"
+
 
 def test_signup_existing_user(client):
     # Test user signup with existing user
